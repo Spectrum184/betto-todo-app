@@ -1,0 +1,129 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: ghostwhite;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-1,
+.btn-2 {
+  width: 100px;
+  height: 30px;
+  color: black;
+  background-color: green;
+  padding: 5px;
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.btn-2 {
+  background-color: brown;
+}
+
+.container {
+  margin: 0 100px;
+}
+
+.search-field {
+  margin-right: 10px;
+}
+
+.btn-search {
+  cursor: pointer;
+}
+
+.btn-add {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.folder-commit {
+  display: flex;
+  margin: 10px auto;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.btn-commit {
+  background-color: purple;
+  color: lightblue;
+  padding: 0 10px;
+  margin-top: 22px;
+  cursor: pointer;
+}
+
+.btn-commit:hover {
+  background-color: darkorchid;
+  color: aqua;
+}
+
+.date-input-field {
+  max-width: 200px;
+}
+
+.content-input-field {
+  min-width: 400px;
+}
+
+.main-table {
+  margin-top: 30px;
+  border-collapse: collapse;
+  height: 20px;
+  justify-self: center;
+}
+
+.main-table > thead > tr > th,
+.main-table > tbody > tr > td {
+  padding: 10px;
+  border: 1px solid black;
+  max-width: 500px;
+}
+
+.btn-edit,
+.btn-delete {
+  border: 0;
+  background-color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  color: mediumaquamarine;
+}
+
+.btn-delete:hover {
+  color: red;
+}
