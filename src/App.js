@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import './styles/App.css'
+import './styles/responsive.css'
 
 function App() {
   const initialTodo = {
     date: '',
     content: '',
+    complete:false,
     key: null,
+    
   }
 
   const [listTodo, setListTodo] = useState([])
@@ -14,6 +17,8 @@ function App() {
   const [listSearchTodo, setListSearchTodo] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [onSearch, setOnSearch] = useState(false)
+  const [checked, setChecked] = useState(false)
+
 
   useEffect(() => {
     const listTodo = JSON.parse(localStorage.getItem('todoList'))
@@ -50,6 +55,7 @@ function App() {
       setTodo(initialTodo)
       localStorage.setItem('todoList', JSON.stringify(newListTodo))
     } else {
+      
       const listTodoTmp = [...listTodo]
       listTodoTmp.push(todo)
 
@@ -88,10 +94,13 @@ function App() {
     setCommitFormVisibility(false)
   }
 
+ 
+
   return (
     <div className="App">
-      <h1>Betto Todo App</h1>
-      <div>
+      
+      <div className='search'>
+        <h1>Betto Todo App</h1>
         <input
           className="search-field"
           type="date"
@@ -102,7 +111,7 @@ function App() {
           Search
         </button>
         {onSearch && (
-          <button className="btn-search" onClick={() => setOnSearch(false)}>
+          <button className="btn-reset" onClick={() => setOnSearch(false)}>
             Reset
           </button>
         )}
@@ -113,40 +122,33 @@ function App() {
       <div className="container">
         {commitFormVisibility && (
           <div className="folder-commit">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Plan of content</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <input
-                      className="date-input-field"
-                      type="date"
-                      onChange={handleChange}
-                      name="date"
-                      value={todo.date}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="content-input-field"
-                      type="text"
-                      placeholder="coming to cinemas near you..."
-                      onChange={handleChange}
-                      name="content"
-                      value={todo.content}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button className="btn-commit" onClick={upsertTodo}>
+            <div className="addDate">
+              <h4 className="date"> date </h4>
+              <input
+                className="date-input-field"
+                type="date"
+                onChange={handleChange}
+                name="date"
+                value={todo.date}
+              />
+            </div>
+
+            <div className="folder-commit">
+              <div className="addPlan">
+                <h4 className="plan"> content of plan </h4>
+                <textarea
+                  className="content-input-field"
+                  type="text"
+                  placeholder="coming to cinemas near you..."
+                  onChange={handleChange}
+                  name="content"
+                  value={todo.content}
+                />
+              </div>
+              <button className="btn-commit" onClick={upsertTodo}>
               Commit
-            </button>
+              </button>
+             </div>
           </div>
         )}
         <center>
@@ -183,7 +185,11 @@ function App() {
                 ) : (
                   listTodo.map((value, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
+                      <td>{index + 1}  <input
+                        type="checkbox"
+                        checked={value.complete}
+                        onChange={e => setChecked(e.target.checked)}
+                      /> </td>
                       <td>{value.date}</td>
                       <td>{value.content}</td>
                       <td>

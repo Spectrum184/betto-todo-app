@@ -1,0 +1,89 @@
+/*mobile tablet*/
+@media (max-width: 1023px) {
+}
+
+/*tablet*/
+@media (min-width: 740px) and (max-width: 1023px) {
+.folder-commit{
+    flex-direction:column;
+    float: left;
+    margin: 5px 0;
+  }
+
+.addDate{
+     margin-right: 250px;
+}
+
+.date,.plan{
+    text-align: left;
+    padding-left: 5px;
+}
+.btn-commit{
+   margin-right: 340px;
+}
+
+
+}
+
+/*mobile*/
+@media (max-width: 739px) {
+ .folder-commit{
+    flex-direction:column;
+    float: left;
+    padding: -10px 0;
+    margin-top: 20px;
+  }
+
+  .addDate{
+     margin-right: 150px;
+     padding-top: 10px;
+}
+
+.date,.plan{
+    text-align: left;
+    padding-left: 5px;
+}
+.btn-commit{
+   margin-right: 240px;
+}
+
+  .content-input-field {
+    min-width: 300px;
+    }
+    .search{
+        text-align: center;
+        margin-left: 0 auto;
+    }
+    .container{
+        margin: 0;
+    }
+    .main-table > thead > tr > th,
+    .main-table > tbody > tr > td{
+        padding: 0;
+        text-align: center;
+    }
+   .main-table > thead > tr > th,
+   .main-table > tbody > tr > td:nth-child(1){
+        width: 30px;
+    }
+    .main-table > thead > tr > th,
+   .main-table > tbody > tr > td:nth-child(4){
+        width: 30px;
+        padding: 0;
+    }
+    .main-table > thead > tr > th,
+    .main-table > tbody > tr > td:last-child(5){
+       width: 30px;
+        padding: 0;
+    }
+   .main-table > thead > tr > th,
+    .main-table > tbody > tr > td:last-child(3){
+        width: 200px;
+        padding: 0;
+    }
+    .btn-edit,
+    .btn-delete{
+        padding: 0;
+    }
+}
+

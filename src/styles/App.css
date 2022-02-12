@@ -37,21 +37,6 @@
   }
 }
 
-.btn-1,
-.btn-2 {
-  width: 100px;
-  height: 30px;
-  color: black;
-  background-color: green;
-  padding: 5px;
-  margin-right: 5px;
-  font-size: 14px;
-}
-
-.btn-2 {
-  background-color: brown;
-}
-
 .container {
   margin: 0 100px;
 }
@@ -64,25 +49,37 @@
   cursor: pointer;
 }
 
+.btn-reset{
+  margin-left: 5px;
+  cursor: pointer;
+}
+
 .btn-add {
   margin-top: 10px;
   cursor: pointer;
 }
 
 .folder-commit {
-  display: flex;
+  display: inline-flex;
   margin: 10px auto;
-  justify-content: center;
   align-items: center;
-  padding-top: 20px;
+  padding: 0 10px;
 }
 
+.date,.plan {
+  margin: 0;
+}
+.addDate{
+  margin-top: -15px;
+}
 .btn-commit {
   background-color: purple;
   color: lightblue;
   padding: 0 10px;
-  margin-top: 22px;
   cursor: pointer;
+  margin-left: 5px;
+  border-radius: 2px;
+  height: 20px;
 }
 
 .btn-commit:hover {
