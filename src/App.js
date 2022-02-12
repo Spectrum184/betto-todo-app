@@ -6,9 +6,9 @@ function App() {
   const initialTodo = {
     date: '',
     content: '',
-    complete:false,
+    complete: false,
     key: null,
-    
+
   }
 
   const [listTodo, setListTodo] = useState([])
@@ -17,15 +17,23 @@ function App() {
   const [listSearchTodo, setListSearchTodo] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [onSearch, setOnSearch] = useState(false)
-  const [checked, setChecked] = useState(false)
+  const [countCompleted, setCountCompleted] = useState(0);
+  const [allCompleted, setAllCompleted] = useState(false);
 
 
   useEffect(() => {
     const listTodo = JSON.parse(localStorage.getItem('todoList'))
 
     if (listTodo && listTodo.length > 0) {
-      setListTodo(listTodo)
+      setListTodo(listTodo);
+      let count = 0;
+      for (let i = 0; i < listTodo.length; i++) {
+        if (listTodo[i].complete) count++;
+      }
+      if (count === listTodo.length) setAllCompleted(true);
+      setCountCompleted(count);
     }
+
   }, [])
 
   const toggleCommitForm = () => {
@@ -49,16 +57,20 @@ function App() {
     if (todo.key !== null) {
       const newListTodo = [...listTodo]
 
-      newListTodo[todo.key] = todo
+      newListTodo[todo.key] = todo;
+      newListTodo[todo.key].key = null;
 
       setListTodo(newListTodo)
       setTodo(initialTodo)
       localStorage.setItem('todoList', JSON.stringify(newListTodo))
     } else {
-      
+
       const listTodoTmp = [...listTodo]
       listTodoTmp.push(todo)
 
+      listTodoTmp.sort((a, b) =>
+        a.date > b.date ? 1 : a.date < b.date ? -1 : 0
+      )
       setListTodo(listTodoTmp)
 
       setTodo(initialTodo)
@@ -94,11 +106,53 @@ function App() {
     setCommitFormVisibility(false)
   }
 
- 
+  const handleCheckbox = (index) => {
+    const newListTodo = [...listTodo];
+    if (!newListTodo[index]?.complete) {
+      newListTodo[index].complete = true;
+      setCountCompleted(countCompleted + 1);
+    } else {
+      newListTodo[index].complete = false;
+      setCountCompleted(countCompleted - 1);
+    }
+    setListTodo(newListTodo);
+    localStorage.setItem('todoList', JSON.stringify(newListTodo))
+  }
+  const handleChangeAll = () => {
+    setAllCompleted(!allCompleted)
+    setCountCompleted(allCompleted ? 0: listTodo.length)
+    
+    const newListTodo = [...listTodo];
+    newListTodo.forEach(todo=>{
+      todo.complete = !allCompleted
+    })
+    setListTodo(newListTodo);
+    localStorage.setItem('todoList', JSON.stringify(newListTodo))
+  }
+
+  const deleteCompleted = () => {
+    const initComplete = [];
+
+    for (let i = 0; i < listTodo.length; i++) {
+      if (listTodo[i].complete === false) {
+        initComplete.push(listTodo[i])
+      }
+    }
+    setCountCompleted(0);
+    setListTodo(initComplete);
+    localStorage.setItem('todoList', JSON.stringify(initComplete))
+  }
+
+  const resetData = () => {
+    const listTodo = [];
+    setListTodo(listTodo);
+    setCountCompleted(0)
+    localStorage.setItem("todoList", JSON.stringify(listTodo));
+  }
 
   return (
     <div className="App">
-      
+
       <div className='search'>
         <h1>Betto Todo App</h1>
         <input
@@ -119,6 +173,12 @@ function App() {
       <button className="btn-add" onClick={toggleCommitForm}>
         Add
       </button>
+      { allCompleted? (
+        <h4>All completed</h4>
+        ): (
+        <h4>You have completed {countCompleted} item(s) in this list</h4>
+        )
+      }
       <div className="container">
         {commitFormVisibility && (
           <div className="folder-commit">
@@ -146,84 +206,100 @@ function App() {
                 />
               </div>
               <button className="btn-commit" onClick={upsertTodo}>
-              Commit
+                Commit
               </button>
-             </div>
+            </div>
           </div>
         )}
         <center>
           {listTodo.length > 0 && (
-            <table className="main-table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Date</th>
-                  <th>Plan of content</th>
-                  {!onSearch && (
-                    <>
-                      <th>Edit</th>
-                      <th>Delete</th>
-                    </>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {onSearch ? (
-                  listSearchTodo.length > 0 ? (
-                    listSearchTodo.map((item, index) => (
+            <div>
+              <table className="main-table">
+                <thead>
+                  <tr>
+                    <th>No. <input
+                      type="checkbox"
+                      checked={allCompleted}
+                      onChange={() => handleChangeAll()}
+                    /></th>
+                    <th>Date</th>
+                    <th>Plan of content</th>
+                    {!onSearch && (
+                      <>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                      </>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {onSearch ? (
+                    listSearchTodo.length > 0 ? (
+                      listSearchTodo.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.date}</td>
+                          <td>{item.content}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td>No Result</td>
+                      </tr>
+                    )
+                  ) : (
+                    listTodo.map((value, index) => (
                       <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{item.date}</td>
-                        <td>{item.content}</td>
+                        <td>{index + 1}  <input
+                          type="checkbox"
+                          checked={value.complete}
+                          onChange={() => handleCheckbox(index)}
+                        /> </td>
+                        <td>{value.date}</td>
+                        <td>{value.content}</td>
+                        <td>
+                          <button
+                            className="btn-edit"
+                            onClick={() =>
+                              handleEditTodo({ ...value, key: index })
+                            }
+                          >
+                            Edit
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            onClick={() => {
+                              // eslint-disable-next-line no-restricted-globals
+                              if (confirm('Có xoá không bạn êi!')) {
+                                handleDeleteTodo(index)
+                              }
+                            }}
+                            className="btn-delete"
+                          >
+                            Delete
+                          </button>
+                        </td>
                       </tr>
                     ))
-                  ) : (
-                    <tr>
-                      <td>No Result</td>
-                    </tr>
-                  )
-                ) : (
-                  listTodo.map((value, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}  <input
-                        type="checkbox"
-                        checked={value.complete}
-                        onChange={e => setChecked(e.target.checked)}
-                      /> </td>
-                      <td>{value.date}</td>
-                      <td>{value.content}</td>
-                      <td>
-                        <button
-                          className="btn-edit"
-                          onClick={() =>
-                            handleEditTodo({ ...value, key: index })
-                          }
-                        >
-                          Edit
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            // eslint-disable-next-line no-restricted-globals
-                            if (confirm('Có xoá không bạn êi!')) {
-                              handleDeleteTodo(index)
-                            }
-                          }}
-                          className="btn-delete"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+              <button className='btn-delete-completed' onClick={() => {
+                // eslint-disable-next-line no-restricted-globals
+                if (confirm('xóa hết à bạn ey')) deleteCompleted()
+              }
+              }>Delete Completed</button>
+              <button className='btn-delete-all' onClick={() => {
+                // eslint-disable-next-line no-restricted-globals
+                if (confirm('xóa hết à bạn ey')) resetData()
+              }
+              }>Delete All</button>
+            </div>
           )}
         </center>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 }
 
